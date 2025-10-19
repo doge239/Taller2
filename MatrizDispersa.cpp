@@ -13,7 +13,7 @@ Nodo* buscarNodo(Nodo* inicio, int posX, int posY) {
         }
         actual = actual->siguiente;
     }
-    return nullptr; // No se encontró el nodo
+    return nullptr; 
 }
 
 int contarElementos(Nodo* inicio) {
@@ -96,7 +96,7 @@ MatrizDispersa::MatrizDispersa(const MatrizDispersa& otra) : start(nullptr) {
     }
 }
 
-MatrizDispersa& MatrizDispersa::operator=(const MatrizDispersa& otra) {
+MatrizDispersa& MatrizDispersa::duplicarMatriz(const MatrizDispersa& otra) {
     if (this != &otra) {
         // Limpiar contenido actual
         limpiarLista(start);
@@ -116,7 +116,7 @@ MatrizDispersa::~MatrizDispersa() {
 }
 
 void MatrizDispersa::add(int value, int xPos, int yPos) {
-    if (xPos < 0 || yPos < 0) {
+    if (xPos < 0 || yPos < 0) { // validar si las posiciones son negativas
         return;
     }
     
@@ -136,26 +136,108 @@ void MatrizDispersa::add(int value, int xPos, int yPos) {
 }
 
 int MatrizDispersa::get(int xPos, int yPos) {
-    // Validar coordenadas - si son negativas, retornar 0 inmediatamente
-    if (xPos < 0 || yPos < 0) {
+   
+    if (xPos < 0 || yPos < 0) {  // Validar coordenadas si son negativas
         return 0;
     }
     
-    // Buscar el nodo en la posición especificada
     Nodo* nodo = buscarNodo(start, xPos, yPos);
-    
-    // Si se encontró el nodo, retornar su valor
-    // Si no se encontró, retornar 0 (como especifica el PDF)
+
     if (nodo != nullptr) {
         return nodo->valor;
     } else {
-        return 0; // No hay datos en dicha coordenada
+        return 0; 
     }
 }
 
-// Primera parte de clase MatrizDispersa
+void MatrizDispersa::remove(int xPos, int yPos) {
+    if (xPos < 0 || yPos < 0) {  // Validar coordenadas si son negativas
+        return;
+    }
+    
+    Nodo* nodoAEliminar = buscarNodo(start, xPos, yPos);
+    
+    if (nodoAEliminar != nullptr) {
+        
+        if (nodoAEliminar->anterior != nullptr) {
+            nodoAEliminar->anterior->siguiente = nodoAEliminar->siguiente;
+        } else {
+            start = nodoAEliminar->siguiente;
+        }
+        
+        if (nodoAEliminar->siguiente != nullptr) {
+            nodoAEliminar->siguiente->anterior = nodoAEliminar->anterior;
+        }
+        
+        delete nodoAEliminar;
+    }
+}
 
+void MatrizDispersa::valoresAlmacenados() {
+    Nodo* actual = start;
+    
+    if (actual == nullptr) {
+        cout << "La matriz no contiene elementos diferentes de cero." << endl;
+        return;
+    }
+    
+    cout << "Elementos almacenados (diferentes de 0):" << endl;
+    while (actual != nullptr) {
+        cout << "(" << actual->coordenadaX << ", " << actual->coordenadaY << ") --> " << actual->valor << endl;
+        actual = actual->siguiente;
+    }
+}
 
+int MatrizDispersa::densidadMatriz() {
+    int cantidadElementos = contarElementos(start);
+    
+    if (cantidadElementos == 0) {
+        return 0;
+    }
+    
+    int maxX, maxY;
+    encontrarDimensionesMaximas(start, maxX, maxY);
+    
+    if (maxX < 0 || maxY < 0) {
+        return 0;
+    }
+    
+    int tamanoTotal = (maxX + 1) * (maxY + 1);
+    
+    if (tamanoTotal == 0) {
+        return 0;
+    }
+    
+    int densidadPorcentaje = (cantidadElementos * 100) / tamanoTotal;
+    return densidadPorcentaje;
+}
 
-
-
+MatrizDispersa* MatrizDispersa::multiplicarMatriz(MatrizDispersa* segundaMatriz) {
+    if (segundaMatriz == nullptr) {
+        return new MatrizDispersa();
+    }
+    
+    MatrizDispersa* matrizResultado = new MatrizDispersa();
+    
+    if (start == nullptr || segundaMatriz->start == nullptr) {
+        return matrizResultado;
+    }
+    
+    Nodo* actualPrimera = start;
+    
+    while (actualPrimera != nullptr) {
+        Nodo* actualSegunda = segundaMatriz->start;
+        
+        while (actualSegunda != nullptr) {
+            if (actualPrimera->coordenadaY == actualSegunda->coordenadaX) {
+                int producto = actualPrimera->valor * actualSegunda->valor;
+                int valorActual = matrizResultado->get(actualPrimera->coordenadaX, actualSegunda->coordenadaY);
+                matrizResultado->add(valorActual + producto, actualPrimera->coordenadaX, actualSegunda->coordenadaY);
+            }
+            actualSegunda = actualSegunda->siguiente;
+        }
+        actualPrimera = actualPrimera->siguiente;
+    }
+    
+    return matrizResultado;
+}
