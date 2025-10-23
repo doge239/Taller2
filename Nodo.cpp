@@ -1,25 +1,19 @@
 #include "Nodo.h"
 
-Nodo::Nodo(int val, int coordenadaX, int coordenadaY) // Constructor de posicion con valor
-    : valor(val), coordenadaX(coordenadaX), coordenadaY(coordenadaY), // Inicializar punteros
-      siguiente(nullptr), anterior(nullptr) { 
+Nodo::Nodo(int val, int x, int y)  // Inicializador
+    : valor(val), coordenadaX(x), coordenadaY(y), 
+      siguiente(nullptr), anterior(nullptr) { // Validar coordenadas
     
-
-
-    // Validaciones básicas
-    if (coordenadaX < 0 || coordenadaY < 0) {
-        throw std::invalid_argument("Las coordenadas no pueden ser negativas"); // Manejo de error simple
+    if (x < 0 || y < 0) {
+        throw std::invalid_argument("Las coordenadas no pueden ser negativas");
     }
 }
 
-Nodo::~Nodo() {
-    // Limpiar referencias para seguridad
+Nodo::~Nodo() { // Destructor de clase Nodo
     siguiente = nullptr;
     anterior = nullptr;
 }
 
-// Método para verificar si está en una posición específica
-
-bool Nodo::estaEnPosicion(int coordenadaX, int coordenadaY) const {
-    return (coordenadaX == coordenadaX && coordenadaY == coordenadaY);
+bool Nodo::estaEnPosicion(int x, int y) const { // Verificar si el nodo esta en la posicion dada
+    return (coordenadaX == x && coordenadaY == y);
 }
