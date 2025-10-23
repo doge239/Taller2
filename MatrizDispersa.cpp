@@ -310,4 +310,4 @@ MatrizDispersa* MatrizDispersa::multiplicarMatriz(MatrizDispersa* segundaMatriz)
     cout << "Multiplicacion completada. Operaciones realizadas: " << operaciones << endl;
     return matrizResultado;
 }
-//Clase terminada
+//Clase MatrizDispersa terminada
