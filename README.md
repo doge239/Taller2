@@ -1,7 +1,7 @@
 git clone https://github.com/doge239/Taller2
 
 
-# Sistema de Gestión Académica
+# TALLER 2
 
 ## Integrantes del Grupo
 - **Nicolás Cortes Vergara** - 21.193.893-5
