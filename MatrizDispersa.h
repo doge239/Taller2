@@ -19,4 +19,4 @@ public:
     MatrizDispersa* multiplicarMatriz(MatrizDispersa* second) const;  
     
     ~MatrizDispersa();
-}
+};
